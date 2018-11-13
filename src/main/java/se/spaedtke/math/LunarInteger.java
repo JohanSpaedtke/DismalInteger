@@ -1,59 +1,17 @@
 package se.spaedtke.math;
 
-import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
-import org.valid4j.Assertive;
 
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.stream.IntStream;
 
 import static org.valid4j.Assertive.require;
 
 public class LunarInteger
 {
-
     public final int[] value;
     private final int base;
-
-    private static int[] add(final int[] first, final int[] second)
-    {
-        final int[] res = new int[first.length];
-        for (int i = 0; i < first.length; i++)
-        {
-            res[i] = Math.max(first[i], second[i]);
-        }
-        return res;
-    }
-
-    private static int[] mult(final int[] first, final int[] second)
-    {
-        final Pair<int[], int[]> sortedNumbers = first.length > second.length ? Pair.of(first, second) : Pair.of(second, first);
-        final int[] longest = sortedNumbers.getKey();
-        final int[] shortest = sortedNumbers.getValue();
-        int resLength = longest.length + shortest.length - 1;
-        final int[][] multRes = new int[shortest.length][resLength];
-        for (int i = 0; i < shortest.length; i++)
-        {
-            for (int j = 0; j < longest.length; j++)
-            {
-                int number = shortest.length - 1 - i;
-                int position = i + j;
-                multRes[number][position] = Math.min(shortest[i], longest[j]);
-            }
-        }
-        return Arrays.stream(multRes).reduce(new int[resLength], LunarInteger::add);
-    }
-
-    private static int[] pad(final int length, final int[] value)
-    {
-        final int[] res = new int[length];
-        final int offset = length - value.length;
-        for (int i = 0; i < (length - offset); i++)
-        {
-            res[i + offset] = value[i];
-        }
-        return res;
-    }
 
     private static int[] toArray(@NotNull final String val)
     {
@@ -105,41 +63,51 @@ public class LunarInteger
     {
         require(this.base == other.base,
                 "Can't add two " + LunarInteger.class.getSimpleName() + " with different base");
+        return new LunarInteger(LunarArithmetic.add(this.value, other.value), this.base);
+    }
 
-        if (this.value.length == other.value.length)
+    @Override
+    public int hashCode()
+    {
+        int result = Objects.hash(base);
+        result = 31 * result + Arrays.hashCode(value);
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o)
         {
-            return new LunarInteger(add(this.value, other.value), this.base);
+            return true;
         }
-        else if (this.value.length > other.value.length)
+        if (o == null || getClass() != o.getClass())
         {
-            final int[] padded = pad(this.value.length, other.value);
-            return new LunarInteger(add(this.value, padded), this.base);
+            return false;
         }
-        else
-        {
-            final int[] padded = pad(other.value.length, this.value);
-            return new LunarInteger(add(padded, other.value), this.base);
-        }
+        LunarInteger that = (LunarInteger) o;
+        return base == that.base &&
+                Arrays.equals(value, that.value);
     }
 
     public LunarInteger mult(final LunarInteger other)
     {
         require(this.base == other.base,
                 "Can't multiply two " + LunarInteger.class.getSimpleName() + " with different base");
-        return new LunarInteger(mult(this.value, other.value), base);
+        return new LunarInteger(LunarArithmetic.mult(this.value, other.value), base);
     }
 
     public LunarInteger pow(final int exponent)
     {
-        Assertive.require(exponent >= 0, "Exponents less than 0 are not defined");
+        require(exponent >= 0, "Exponents less than 0 are not defined");
         if (exponent == 0)
         {
-            return new LunarInteger(this.base - 1, this.base);
+            return LunarArithmetic.multiplicativeIdentity(this.base);
         }
         return new LunarInteger(IntStream.range(1, exponent)
                 .boxed()
                 .map(i -> this.value)
-                .reduce(this.value, LunarInteger::mult), this.base);
+                .reduce(this.value, LunarArithmetic::mult), this.base);
     }
 
     public int toInt()

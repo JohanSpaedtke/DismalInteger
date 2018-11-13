@@ -17,6 +17,22 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 @DisplayName("Multiplication")
 public class MultiplicationTest
 {
+    @Test
+    @DisplayName("Powers")
+    public void pow(){
+        Assertions.assertEquals(new LunarInteger(9), new LunarInteger(19).pow(0));
+        Assertions.assertEquals(new LunarInteger(19), new LunarInteger(19).pow(1));
+        Assertions.assertEquals(new LunarInteger(19)
+                .mult(new LunarInteger(19)), new LunarInteger(19).pow(2));
+        Assertions.assertEquals(new LunarInteger(19)
+                .mult(new LunarInteger(19))
+                .mult(new LunarInteger(19)), new LunarInteger(19).pow(3));
+        Assertions.assertEquals(new LunarInteger(19)
+                .mult(new LunarInteger(19))
+                .mult(new LunarInteger(19))
+                .mult(new LunarInteger(19)), new LunarInteger(19).pow(4));
+    }
+
     @ParameterizedTest
     @DisplayName("Different Length Digits")
     @MethodSource("differentLengthDigits")
