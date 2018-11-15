@@ -4,9 +4,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>se.spaedtke</groupId>
-    <artifactId>dismal-integer</artifactId>
+    <artifactId>lunar-arithmetic</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>Dismal Integer</name>
+    <name>Lunar Arithmetic</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

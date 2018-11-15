@@ -21,7 +21,7 @@ class AdditionTest
     public void addDifferentLengthDigits(int base, int first, int second, int expected)
     {
         Assertions.assertEquals(expected,
-                new LunarInteger(first, base).add(new LunarInteger(second, base)).toInt());
+                new LunarInteger(first, base).add(new LunarInteger(second, base)).intValue());
     }
 
     @ParameterizedTest
@@ -30,7 +30,7 @@ class AdditionTest
     public void addDoubleDigits(int base, String first, String second, int expected)
     {
         Assertions.assertEquals(expected,
-                new LunarInteger(first, base).add(new LunarInteger(second, base)).toInt());
+                new LunarInteger(first, base).add(new LunarInteger(second, base)).intValue());
     }
 
     @ParameterizedTest
@@ -39,7 +39,7 @@ class AdditionTest
     public void addSingleDigits(int base, int first, int second, int expected)
     {
         Assertions.assertEquals(expected,
-                new LunarInteger(first, base).add(new LunarInteger(second, base)).toInt());
+                new LunarInteger(first, base).add(new LunarInteger(second, base)).intValue());
     }
 
     static Stream<Arguments> differentLengthDigits()

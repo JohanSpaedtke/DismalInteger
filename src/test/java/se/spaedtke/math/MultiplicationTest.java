@@ -8,7 +8,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.Arrays;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -18,8 +17,33 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 public class MultiplicationTest
 {
     @Test
+    public void dummy()
+    {
+        System.out.println(new LunarInteger(19).pow(2));
+    }
+
+    @ParameterizedTest
+    @DisplayName("Different Length Digits")
+    @MethodSource("differentLengthDigits")
+    public void multiplyDifferentLengthDigits(int base, int first, int second, int expected)
+    {
+        Assertions.assertEquals(expected,
+                new LunarInteger(first, base).mult(new LunarInteger(second, base)).intValue());
+    }
+
+    @ParameterizedTest
+    @DisplayName("Single Digits")
+    @MethodSource("singleDigits")
+    public void multiplySingleDigits(int base, int first, int second, int expected)
+    {
+        Assertions.assertEquals(expected,
+                new LunarInteger(first, base).mult(new LunarInteger(second, base)).intValue());
+    }
+
+    @Test
     @DisplayName("Powers")
-    public void pow(){
+    public void pow()
+    {
         Assertions.assertEquals(new LunarInteger(9), new LunarInteger(19).pow(0));
         Assertions.assertEquals(new LunarInteger(19), new LunarInteger(19).pow(1));
         Assertions.assertEquals(new LunarInteger(19)
@@ -31,24 +55,6 @@ public class MultiplicationTest
                 .mult(new LunarInteger(19))
                 .mult(new LunarInteger(19))
                 .mult(new LunarInteger(19)), new LunarInteger(19).pow(4));
-    }
-
-    @ParameterizedTest
-    @DisplayName("Different Length Digits")
-    @MethodSource("differentLengthDigits")
-    public void multiplyDifferentLengthDigits(int base, int first, int second, int expected)
-    {
-        Assertions.assertEquals(expected,
-                new LunarInteger(first, base).mult(new LunarInteger(second, base)).toInt());
-    }
-
-    @ParameterizedTest
-    @DisplayName("Single Digits")
-    @MethodSource("singleDigits")
-    public void multiplySingleDigits(int base, int first, int second, int expected)
-    {
-        Assertions.assertEquals(expected,
-                new LunarInteger(first, base).mult(new LunarInteger(second, base)).toInt());
     }
 
     static Stream<Arguments> differentLengthDigits()
